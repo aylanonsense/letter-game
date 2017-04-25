@@ -1,15 +1,16 @@
+const path = require('path');
+const express = require('express');
+
 //set up a web server
-var path = require('path');
-var express = require('express');
-var app = express();
+const app = express();
 
 //serve files
 app.use(express.static(path.join(__dirname, '/public')));
-app.get('/bundle.js', function(req, res) {
-	res.sendFile(path.join(__dirname, '/dist/bundle.js'));
+app.get('/web.js', (req, res) => {
+	res.sendFile(path.join(__dirname, '/build/web.js'));
 });
-app.get('/0.bundle.js', function(req, res) {
-	res.sendFile(path.join(__dirname, '/dist/0.bundle.js'));
+app.get('/web.js.map', (req, res) => {
+	res.sendFile(path.join(__dirname, '/build/web.js.map'));
 });
 
 //start the web server

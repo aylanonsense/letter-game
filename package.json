@@ -4,7 +4,8 @@
   "description": "A game about rearranging letters.",
   "main": "server.js",
   "scripts": {
-    "build": "webpack"
+    "cli": "node cli.js",
+    "build": "node build.js"
   },
   "repository": {
     "type": "git",
@@ -21,10 +22,6 @@
   },
   "devDependencies": {
     "jquery": "^3.2.1",
-    "mustache": "^2.3.0",
-    "mustache-loader": "^0.4.1",
-    "promise": "^7.1.1",
-    "wavefunctioncollapse": "^1.0.0",
     "webpack": "^2.4.1"
   }
 }
