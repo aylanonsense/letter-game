@@ -1,0 +1,30 @@
+{
+  "name": "letter-game",
+  "version": "0.0.1",
+  "description": "A game about rearranging letters.",
+  "main": "server.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bridgs/letter-game.git"
+  },
+  "author": "bridgs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bridgs/letter-game/issues"
+  },
+  "homepage": "https://github.com/bridgs/letter-game#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "devDependencies": {
+    "jquery": "^3.2.1",
+    "mustache": "^2.3.0",
+    "mustache-loader": "^0.4.1",
+    "promise": "^7.1.1",
+    "wavefunctioncollapse": "^1.0.0",
+    "webpack": "^2.4.1"
+  }
+}
