@@ -8,7 +8,7 @@
     "build:cli": "node scripts/build-cli.js",
     "build:web": "node scripts/build-web.js",
     "cli": "node build/cli.js",
-    "cli:watch": "watch --wait 1 --interval 1 --ignoreDirectoryPattern /build/*/ 'npm run build:cli && npm run cli' .",
+    "cli:watch": "watch --wait 1 --interval 1 --ignoreDirectoryPattern /build/*/ 'npm run build:cli' . & nodemon build/cli.js",
     "server": "node scripts/server.js",
     "server:watch": "live-reload --debug --port 3001 'build/' & npm run server & watch --wait 1 --interval 1 --ignoreDirectoryPattern /build/*/ 'npm run build:web' .",
     "start": "node scripts/server.js"
@@ -30,6 +30,7 @@
   "devDependencies": {
     "jquery": "^3.2.1",
     "live-reload": "^1.1.0",
+    "nodemon": "^1.11.0",
     "watch": "^1.0.2",
     "webpack": "^2.4.1"
   }

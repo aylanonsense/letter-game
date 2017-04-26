@@ -1,7 +1,7 @@
 const buildFile = require('./build-file');
 
 buildFile({
-	entry: 'web-main.js',
+	entry: 'mainWeb.js',
 	target: 'web',
 	output: 'web.js'
 }, (err, stats) => {

@@ -1,7 +1,7 @@
 const buildFile = require('./build-file');
 
 buildFile({
-	entry: 'cli-main.js',
+	entry: 'mainCLI.js',
 	target: 'node',
 	output: 'cli.js'
 }, (err, stats) => {
