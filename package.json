@@ -4,11 +4,14 @@
   "description": "A game about rearranging letters.",
   "main": "scripts/server.js",
   "scripts": {
-    "build": "npm run build:cli & npm run build:web",
+    "build": "npm run build:cli & npm run build:editor & npm run build:web",
     "build:cli": "node scripts/build-cli.js",
+    "build:editor": "node scripts/build-editor.js",
     "build:web": "node scripts/build-web.js",
     "cli": "node build/cli.js",
     "cli:watch": "watch --wait 1 --interval 1 --ignoreDirectoryPattern /build/*/ 'npm run build:cli' . & nodemon build/cli.js",
+    "editor": "node build/editor.js",
+    "editor:watch": "watch --wait 1 --interval 1 --ignoreDirectoryPattern /build/*/ 'npm run build:editor' . & nodemon build/editor.js",
     "server": "node scripts/server.js",
     "server:watch": "live-reload --debug --port 3001 'build/' & npm run server & watch --wait 1 --interval 1 --ignoreDirectoryPattern /build/*/ 'npm run build:web' .",
     "start": "node scripts/server.js"

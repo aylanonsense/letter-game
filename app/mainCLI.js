@@ -1,12 +1,9 @@
 import GameState from './game/GameState';
 import CLIRenderer from './render/CLIRenderer';
+import prompt from './util/prompt';
 import clc from 'cli-color';
-import process from 'process';
-
-let stdin = process.openStdin();
 
 //create game vars
-let isAcceptingInput = false;
 let gameState = new GameState({
 	target: 'morning',
 	symbols: 'nmoring'
@@ -21,22 +18,22 @@ function renderGameState() {
 }
 
 function promptForInput() {
-	process.stdout.write('> ' + clc.blackBright('sllssrs'));
-	isAcceptingInput = true;
+	prompt('> ' + clc.blackBright(gameState.puzzle.instructions), function(input) {
+		handleInput(input);
+		renderGameState();
+		promptForInput();
+	});
 }
 
 function handleInput(input) {
-	if (isAcceptingInput) {
-		isAcceptingInput = false;
-		console.log('Input:', input);
+	for (let i = 0; i < input.length; i++) {
+		if (!gameState.puzzle.applyInstruction(input[i])) {
+			console.log(clc.red('Could not apply instruction \'' + input[i] + '\''));
+			break;
+		}
 	}
 }
 
 //begin basic game loop
 renderGameState();
 promptForInput();
-stdin.addListener('data', d => {
-	handleInput(d.toString().trim());
-	renderGameState();
-	promptForInput();
-});
