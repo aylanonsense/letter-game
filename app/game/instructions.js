@@ -1,28 +1,18 @@
+import PuzzleSymbol from './PuzzleSymbol';
+
 export default {
-	'l': {
-		name: 'left',
+	a: {
+		name: 'start',
 		exec: puzzle => {
 			//can't move left if we're already at the leftmost symbol
 			if (puzzle.cursor < 1) {
 				return false;
 			}
-			puzzle.cursor -= 1;
+			puzzle.cursor = 0;
 			return true;
 		}
 	},
-	'r': {
-		name: 'right',
-		exec: puzzle => {
-			//can't move right if we're already at the rightmost symbol
-			let numSymbols = puzzle.symbols.length;
-			if (puzzle.cursor >= numSymbols - 1) {
-				return false;
-			}
-			puzzle.cursor += 1;
-			return true;
-		}
-	},
-	'd': {
+	/*d: {
 		name: 'delete',
 		exec: puzzle => {
 			//can't delete unless we have at least one symbol
@@ -41,35 +31,20 @@ export default {
 			puzzle.cursor = Math.max(0, puzzle.cursor - 1); //TODO should the cursor stay in the same spot?
 			return true;
 		}
-	},
-	's': {
-		name: 'swap',
+	},*/
+	e: {
+		name: 'end',
 		exec: puzzle => {
-			//can't swap unless we have at least two symbols
+			//can't move right if we're already at the rightmost symbol
 			let numSymbols = puzzle.symbols.length;
-			if (numSymbols < 2) {
+			if (puzzle.cursor >= numSymbols - 1) {
 				return false;
 			}
-			//perform the swap
-			if (puzzle.cursor < numSymbols - 1) {
-				puzzle.symbols =
-					puzzle.symbols.substr(0, puzzle.cursor) +
-					puzzle.symbols[puzzle.cursor + 1] +
-					puzzle.symbols[puzzle.cursor] +
-					puzzle.symbols.substr(puzzle.cursor + 2);
-				puzzle.cursor += 1;
-			} else {
-				//special case if the cursor is at the last symbol
-				puzzle.symbols =
-					puzzle.symbols[puzzle.cursor] +
-					puzzle.symbols.substr(1, puzzle.cursor - 1) +
-					puzzle.symbols[0];
-				puzzle.cursor = 0;
-			}
+			puzzle.cursor = numSymbols - 1;
 			return true;
 		}
 	},
-	'f': {
+	f: {
 		name: 'flip',
 		exec: puzzle => {
 			//can't flip unless we have at least two symbols
@@ -78,12 +53,131 @@ export default {
 				return false;
 			}
 			//reverse the symbols
-			let symbols = '';
-			for(let i = puzzle.symbols.length - 1; i >= 0; i--) {
-				symbols += puzzle.symbols[i];
+			puzzle.symbols.reverse();
+			return true;
+		}
+	},
+	l: {
+		name: 'left',
+		exec: puzzle => {
+			//can't move left if we're already at the leftmost symbol
+			if (puzzle.cursor < 1) {
+				return false;
+			}
+			puzzle.cursor -= 1;
+			return true;
+		}
+	},
+	p: {
+		name: 'pack',
+		exec: puzzle => {
+			//can't pack unless we have at least two symbols
+			let numSymbols = puzzle.symbols.length;
+			if (numSymbols < 2) {
+				return false;
+			}
+			//can't pack unless there's a symbol to the right
+			if (puzzle.cursor >= puzzle.symbols.length - 1) {
+				return false;
+			}
+			//can't pack if the current symbol has a packed character
+			if (puzzle.symbols[puzzle.cursor].packed.length > 0) {
+				return false;
+			}
+			//pack the symbol
+			let symbols = [];
+			for (let i = 0; i <= puzzle.cursor; i++) {
+				symbols.push(puzzle.symbols[i]);
+			}
+			puzzle.symbols[puzzle.cursor].packed = puzzle.symbols[puzzle.cursor + 1].char;
+			//unpack the other symbol's packed
+			if (puzzle.symbols[puzzle.cursor + 1].packed.length > 0) {
+				symbols.push(new PuzzleSymbol({
+					char: puzzle.symbols[puzzle.cursor + 1].packed
+				}));
+			}
+			for (let i = puzzle.cursor + 2; i < puzzle.symbols.length; i++) {
+				symbols.push(puzzle.symbols[i]);
 			}
 			puzzle.symbols = symbols;
 			return true;
 		}
+	},
+	r: {
+		name: 'right',
+		exec: puzzle => {
+			//can't move right if we're already at the rightmost symbol
+			let numSymbols = puzzle.symbols.length;
+			if (puzzle.cursor >= numSymbols - 1) {
+				return false;
+			}
+			puzzle.cursor += 1;
+			return true;
+		}
+	},
+	s: {
+		name: 'swap',
+		exec: puzzle => {
+			//can't swap unless we have at least two symbols
+			let numSymbols = puzzle.symbols.length;
+			if (numSymbols < 2) {
+				return false;
+			}
+			//can't swap unless there's a symbol to the right
+			if (puzzle.cursor >= puzzle.symbols.length - 1) {
+				return false;
+			}
+			//perform the swap
+			let temp = puzzle.symbols[puzzle.cursor];
+			puzzle.symbols[puzzle.cursor] = puzzle.symbols[puzzle.cursor + 1];
+			puzzle.symbols[puzzle.cursor + 1] = temp;
+			puzzle.cursor += 1;
+			return true;
+		}
+	},
+	u: {
+		name: 'unpack',
+		exec: puzzle => {
+			//can't unpack unless we have at least one symbol
+			let numSymbols = puzzle.symbols.length;
+			if (numSymbols < 1) {
+				return false;
+			}
+			//can't unpack unless the current symbol has a packed character
+			if (puzzle.symbols[puzzle.cursor].packed.length <= 0) {
+				return false;
+			}
+			//unpack the symbol
+			puzzle.symbols.splice(puzzle.cursor + 1, 0, new PuzzleSymbol({
+				char: puzzle.symbols[puzzle.cursor].packed
+			}));
+			puzzle.symbols[puzzle.cursor].packed = '';
+			return true;
+		}
 	}
 };
+/*
+instructions:
+	b
+	c
+	d delete
+	g
+	h
+	i insert
+	j
+	k repeat instructions
+	m
+	n
+	o
+	q
+	t next letter
+	v
+	w
+	x
+	y
+	z reset
+
+challenges:
+	multiple words with a cursor for each, controlled simultaneously
+	wildcard characters the adopt the instruction used on them
+*/

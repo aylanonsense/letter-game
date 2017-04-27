@@ -1,12 +1,15 @@
 import GameState from './game/GameState';
+import Puzzle from './game/Puzzle';
 import CLIRenderer from './render/CLIRenderer';
 import prompt from './util/prompt';
 import clc from 'cli-color';
 
 //create game vars
 let gameState = new GameState({
-	target: 'morning',
-	symbols: 'nmoring'
+	puzzle: new Puzzle({
+		target: 'morning',
+		symbols: 'nmo(x)ri(y)ng'
+	})
 });
 let renderer = new CLIRenderer({
 	gameState: gameState
@@ -19,7 +22,7 @@ function renderGameState() {
 
 function promptForInput() {
 	prompt('> ' + clc.blackBright(gameState.puzzle.instructions), function(input) {
-		handleInput(input);
+		handleInput(input.toLowerCase());
 		renderGameState();
 		promptForInput();
 	});
